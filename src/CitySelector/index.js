@@ -24,11 +24,16 @@ function CitySelector(settings) {
         let lists = [].filter.call($(a).children(), elem => elem.classList.contains("CitySelector__list"));
         lists.forEach(elem => elem.classList.remove("hidden"));
 
+        $("#info")[0].style.display = "block";
+
         $.getJSON(settings.regionsUrl, (data) => {
+            let regions = [].filter.call($(a).children(), elem => elem.classList.contains("CitySelector__regions"));
+            let localies = [].filter.call($(a).children(), elem => elem.classList.contains("CitySelector__localities"));
             data.forEach(elem => {
-                $(".CitySelector__regions").append(createLiElem(elem.title, elem.id, function () {
-                    loadLocalities(settings.localitiesUrl, this.dataset.number);
+                $(regions).append(createLiElem(elem.title, elem.id, function () {
+                    loadLocalities(localies, settings.localitiesUrl, this.dataset.number);
                     changeSelection(this);
+                    changeDestination(elem.id,"");
                 }));
             });
 
@@ -56,16 +61,21 @@ function changeSelection(that) {
     that.classList.add("_selected");
 }
 
-function loadLocalities(url, number) {
-    let loc = $(".CitySelector__localities");
+function loadLocalities(target, url, number) {
+
+    let loc = $(target);
     loc.empty();
+
+    destroySaveButton(loc.parent());
+
     $.getJSON(url, (data) => {
         data.forEach(region => {
             if (region.id === number) {
                 region.list.forEach(city => {
-                    loc.append(createLiElem(city, 0, function () {
+                    loc.append(createLiElem(city, number, function () {
                         changeSelection(this);
                         appendSaveButton(loc.parent());
+                        changeDestination(this.dataset.number, this.dataset.title);
                     }))
                 });
             }
@@ -79,9 +89,7 @@ function createLiElem(title, number, onClickCallback) {
     liElem.classList.add("CitySelector__item");
     liElem.innerHTML = title;
     liElem.dataset.title = title;
-    if (number > 0) {
-        liElem.dataset.number = number;
-    }
+    liElem.dataset.number = number;
     if (onClickCallback) {
         $(liElem).on("click", onClickCallback);
     }
@@ -94,8 +102,9 @@ function createLiElem(title, number, onClickCallback) {
 function appendSaveButton(target) {
     let buttonClass = "CitySelector__save";
     let $buttonClass = "." + buttonClass;
+    let buttonElem = [].filter.call(target.children(), elem => elem.classList.contains(buttonClass));
 
-    if ($($buttonClass).length !== 0) {
+    if (buttonElem.length !== 0) {
         return;
     }
     let button = document.createElement("input");
@@ -111,14 +120,31 @@ function appendSaveButton(target) {
         let locations = $(lists[1]).children();
         let currentRegion = [].filter.call(regions, elem => elem.classList.contains("_selected"))[0];
         let currentLocation = [].filter.call(locations, elem => elem.classList.contains("_selected"))[0];
-        console.log({
+        let result ={
             region: currentRegion.dataset.title,
             locality: currentLocation.dataset.title,
             id: currentRegion.dataset.number
-        });
+        };
+        console.log(result);
     });
+}
+function destroySaveButton(target){
 
+    let buttonClass = "CitySelector__save";
+    let buttonElem = [].filter.call(target.children(), elem => elem.classList.contains(buttonClass));
+    if(buttonElem.length > 0){
+        $(buttonElem).remove();
+    }
 
+}
+
+function changeDestination(id, locality){
+    let target = {
+        id: $("#regionText")[0],
+        locality: $("#localityText")[0]
+    };
+    target.id.innerHTML = id;
+    target.locality.innerHTML = locality;
 }
 
 
