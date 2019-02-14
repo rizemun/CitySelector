@@ -2,4 +2,34 @@
     float: right;
 }
 
-// Your code...
+.hidden {
+    display: none;
+}
+
+.CitySelector{
+    height: 300px;
+    border: 1px solid brown;
+
+
+    &__select-button{
+
+    }
+    &__list{
+        width: 170px;
+        padding: 0;
+        margin-right: 40px;
+        float: left;
+    }
+    &__item{
+        margin: 0;
+        padding-left: 10px;
+        font-size: 16px;
+        height: 30px;
+        line-height: 30px;
+        list-style: none;
+    }
+    &__item._selected{
+        background-color: #ddd;
+    }
+
+}
