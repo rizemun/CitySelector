@@ -35,7 +35,7 @@ function CitySelector(settings) {
 
         });
     });
-    this.destroy = function(){
+    this.destroy = function () {
         let target = "#" + settings.elementId;
         let $target = $(target);
         let selectors = [].filter.call($(target).children(), elem => elem.classList.contains("CitySelector"));
@@ -46,9 +46,7 @@ function CitySelector(settings) {
 }
 
 
-
-
-function changeSelection(that){
+function changeSelection(that) {
     let nodes = $(that).parent().children();
     [].forEach.call(nodes, elem => {
         if (elem.classList.contains("_selected")) {
@@ -65,7 +63,7 @@ function loadLocalities(url, number) {
         data.forEach(region => {
             if (region.id === number) {
                 region.list.forEach(city => {
-                    loc.append(createLiElem(city, 0,function() {
+                    loc.append(createLiElem(city, 0, function () {
                         changeSelection(this);
                         appendSaveButton(loc.parent());
                     }))
@@ -76,13 +74,12 @@ function loadLocalities(url, number) {
 }
 
 
-
 function createLiElem(title, number, onClickCallback) {
     let liElem = document.createElement("li");
     liElem.classList.add("CitySelector__item");
     liElem.innerHTML = title;
     liElem.dataset.title = title;
-    if(number>0) {
+    if (number > 0) {
         liElem.dataset.number = number;
     }
     if (onClickCallback) {
@@ -94,11 +91,11 @@ function createLiElem(title, number, onClickCallback) {
 /*
 Используется паттерн "синглтон"
  */
-function appendSaveButton(target){
+function appendSaveButton(target) {
     let buttonClass = "CitySelector__save";
-    let $buttonClass = "."+buttonClass;
+    let $buttonClass = "." + buttonClass;
 
-    if($($buttonClass).length !==0){
+    if ($($buttonClass).length !== 0) {
         return;
     }
     let button = document.createElement("input");
@@ -107,13 +104,13 @@ function appendSaveButton(target){
     button.classList.add(buttonClass);
     target.append(button);
     let $button = $(button);
-    $button.on("click", function(){
+    $button.on("click", function () {
         let neighbours = $button.parent().children();
-        let lists = [].filter.call(neighbours,elem => elem.classList.contains("CitySelector__list"));
+        let lists = [].filter.call(neighbours, elem => elem.classList.contains("CitySelector__list"));
         let regions = $(lists[0]).children();
         let locations = $(lists[1]).children();
-        let currentRegion = [].filter.call(regions,elem => elem.classList.contains("_selected"))[0];
-        let currentLocation = [].filter.call(locations,elem => elem.classList.contains("_selected"))[0];
+        let currentRegion = [].filter.call(regions, elem => elem.classList.contains("_selected"))[0];
+        let currentLocation = [].filter.call(locations, elem => elem.classList.contains("_selected"))[0];
         console.log({
             region: currentRegion.dataset.title,
             locality: currentLocation.dataset.title,
