@@ -45,5 +45,20 @@
     }
   ],
   "selectedRegions": [
+    {
+      "region": "Краснодарский край",
+      "locality": "Кропоткин",
+      "id": "23"
+    },
+    {
+      "region": "23",
+      "locality": "Староминская",
+      "id": "IDL8v0dF8"
+    },
+    {
+      "region": "23",
+      "locality": "Горячий ключ",
+      "id": "HOKM3o8Gr"
+    }
   ]
 }
